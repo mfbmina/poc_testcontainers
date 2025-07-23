@@ -36,14 +36,14 @@ func setupDB(t *testing.T) (*sql.DB, error) {
 		return nil, err
 	}
 
-	db, err := NewDB(host, port.Int(), "user", "password", "test")
+	db, err := newDB(host, port.Int(), "user", "password", "test")
 	if err != nil {
 		t.Fatalf("Failed to connect to database: %v", err)
 		return nil, err
 	}
 	defer db.Close()
 
-	err = CreateTable(db)
+	err = createTable(db)
 	if err != nil {
 		t.Fatalf("Failed to create table: %v", err)
 		return nil, err
@@ -60,7 +60,7 @@ func TestInsertTable(t *testing.T) {
 	}
 
 	content := "Hello, Testcontainers!"
-	err = InsertPost(db, content)
+	err = insertPost(db, content)
 	if err != nil {
 		t.Fatalf("Failed to insert post: %v", err)
 	}

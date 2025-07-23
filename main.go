@@ -6,30 +6,27 @@ import (
 	"log"
 )
 
-const ()
-
 func main() {
-	// connection string
 	host := "localhost"
 	port := 5432
 	user := "postgres"
 	password := "<password>"
 	dbname := "<dbname>"
 
-	db, err := NewDB(host, port, user, password, dbname)
+	db, err := newDB(host, port, user, password, dbname)
 	if err != nil {
 		log.Fatalf("Error: %v", err)
 	}
 	defer db.Close()
 
-	err = CreateTable(db)
+	err = createTable(db)
 	if err != nil {
 		log.Fatalf("Error creating table: %v", err)
 	}
 
 }
 
-func NewDB(host string, port int, user, password, dbname string) (*sql.DB, error) {
+func newDB(host string, port int, user, password, dbname string) (*sql.DB, error) {
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlconn)
 	if err != nil {
@@ -44,7 +41,7 @@ func NewDB(host string, port int, user, password, dbname string) (*sql.DB, error
 	return db, nil
 }
 
-func CreateTable(db *sql.DB) error {
+func createTable(db *sql.DB) error {
 	query := `CREATE TABLE IF NOT EXISTS posts (
 		id SERIAL PRIMARY KEY,
 		content TEXT NOT NULL
@@ -59,7 +56,7 @@ func CreateTable(db *sql.DB) error {
 	return nil
 }
 
-func InsertPost(db *sql.DB, content string) error {
+func insertPost(db *sql.DB, content string) error {
 	query := `INSERT INTO posts (content) VALUES ($1);`
 	_, err := db.Exec(query, content)
 	if err != nil {
