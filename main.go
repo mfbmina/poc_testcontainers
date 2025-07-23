@@ -24,6 +24,7 @@ func main() {
 		log.Fatalf("Error creating table: %v", err)
 	}
 
+	insertPost(db, "Hello, world!")
 }
 
 func newDB(host string, port int, user, password, dbname string) (*sql.DB, error) {
