@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"net/http"
 )
 
 func main() {
@@ -25,6 +26,7 @@ func main() {
 	}
 
 	insertPost(db, "Hello, world!")
+	getData("http://example.com/api/data")
 }
 
 func newDB(host string, port int, user, password, dbname string) (*sql.DB, error) {
@@ -65,5 +67,21 @@ func insertPost(db *sql.DB, content string) error {
 	}
 
 	log.Println("Post inserted successfully")
+	return nil
+}
+
+func getData(url string) error {
+	resp, err := http.Get(url)
+	if err != nil {
+		return fmt.Errorf("Error fetching: %v", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("Error fetching: %v", resp.Status)
+	}
+
+	// do something with the response
+
 	return nil
 }
